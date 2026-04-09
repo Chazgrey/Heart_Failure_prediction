@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# Load pipeline
+# Load pipeline (with preprocessor)
 pipeline = joblib.load("heart_disease_pipeline.pkl")
 
 st.title("Heart Disease Prediction App")
@@ -18,8 +18,9 @@ exercise_angina = st.selectbox("ExerciseAngina", ["Y", "N"])
 fasting_bs = st.selectbox("FastingBS", [0, 1])
 chest_pain = st.selectbox("ChestPainType", ["ATA", "NAP", "ASY", "TA"])
 st_slope = st.selectbox("ST_Slope", ["Up", "Flat", "Down"])
+resting_ecg = st.selectbox("RestingECG", ["Normal", "LVH", "ST"])  # <-- added
 
-# Collect inputs
+# Collect raw inputs into DataFrame
 input_data = pd.DataFrame({
     "Age": [age],
     "Sex": [sex],
@@ -30,7 +31,8 @@ input_data = pd.DataFrame({
     "ExerciseAngina": [exercise_angina],
     "FastingBS": [fasting_bs],
     "ChestPainType": [chest_pain],
-    "ST_Slope": [st_slope]
+    "ST_Slope": [st_slope],
+    "RestingECG": [resting_ecg]   # <-- included here
 })
 
 # Prediction
@@ -42,3 +44,4 @@ if st.button("Predict"):
     st.write("### Probabilities")
     st.write(f"No Disease: {prob[0]:.2f}")
     st.write(f"Disease: {prob[1]:.2f}")
+
